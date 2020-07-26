@@ -4,7 +4,7 @@ This is a fork of Ensmallen using Eigen as backend.
 
 1. Remove checks.
 2. Rewrite traits.
-3. Rewrite API calls of matrics.
+3. Rewrite API calls of matrices.
 
 ### Requirements
 1. Template library Eigen.
