@@ -1,3 +1,22 @@
+This is a fork of Ensmallen using Eigen as backend.
+
+3 main goals:
+
+1. Remove checks.
+2. Rewrite traits.
+3. Rewrite API calls of matrics.
+
+### Requirements
+1. Template library Eigen.
+2. Template library EigenRand for generating random matrices.
+
+### Developers
+1. Zhou Yao
+
+
+-----
+
+
 <h2 align="center">
   <a href="http://ensmallen.org/"><img src="http://ensmallen.org/img/ensmallen_text.svg" style="background-color:rgba(0,0,0,0);" height=230 alt="ensmallen: a C++ header-only library for numerical optimization"></a>
 </h2>

@@ -21,7 +21,7 @@
   #define ARMA_USE_CXX11
 #endif
 
-#include <armadillo>
+#include <Eigen/Core>
 
 #if !defined(ARMA_USE_CXX11)
   // armadillo automatically enables ARMA_USE_CXX11
