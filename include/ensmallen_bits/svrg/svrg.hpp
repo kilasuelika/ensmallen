@@ -144,7 +144,7 @@ class SVRGType
            typename GradType,
            typename... CallbackTypes>
   typename std::enable_if<IsArmaType<GradType>::value,
-      typename MatType::elem_type>::type
+      typename MatType::Scalar>::type
   Optimize(SeparableFunctionType& function,
            MatType& iterate,
            CallbackTypes&&... callbacks);
@@ -153,7 +153,7 @@ class SVRGType
   template<typename SeparableFunctionType,
            typename MatType,
            typename... CallbackTypes>
-  typename MatType::elem_type Optimize(SeparableFunctionType& function,
+  typename MatType::Scalar Optimize(SeparableFunctionType& function,
                                        MatType& iterate,
                                        CallbackTypes&&... callbacks)
   {

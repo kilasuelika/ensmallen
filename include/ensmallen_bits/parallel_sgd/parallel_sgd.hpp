@@ -89,21 +89,21 @@ class ParallelSGD
             typename GradType,
             typename... CallbackTypes>
   typename std::enable_if<IsArmaType<GradType>::value,
-      typename MatType::elem_type>::type
+      typename MatType::Scalar>::type
   Optimize(SparseFunctionType& function,
            MatType& iterate,
            CallbackTypes&&... callbacks);
 
-  //! Forward arma::SpMat<typename MatType::elem_type> as GradType.
+  //! Forward arma::SpMat<typename MatType::Scalar> as GradType.
   template<typename SeparableFunctionType,
            typename MatType,
            typename... CallbackTypes>
-  typename MatType::elem_type Optimize(SeparableFunctionType& function,
+  typename MatType::Scalar Optimize(SeparableFunctionType& function,
                                        MatType& iterate,
                                        CallbackTypes&&... callbacks)
   {
     return Optimize<SeparableFunctionType, MatType,
-        arma::SpMat<typename MatType::elem_type>, CallbackTypes...>(
+        arma::SpMat<typename MatType::Scalar>, CallbackTypes...>(
         function, iterate, std::forward<CallbackTypes>(callbacks)...);
   }
 

@@ -24,13 +24,13 @@ inline RosenbrockFunction::RosenbrockFunction() { /* Nothing to do here */ }
 inline void RosenbrockFunction::Shuffle() { /* Nothing to do here */ }
 
 template<typename MatType>
-typename MatType::elem_type RosenbrockFunction::Evaluate(
+typename MatType::Scalar RosenbrockFunction::Evaluate(
     const MatType& coordinates,
     const size_t /* begin */,
     const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);
@@ -44,7 +44,7 @@ typename MatType::elem_type RosenbrockFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type RosenbrockFunction::Evaluate(
+typename MatType::Scalar RosenbrockFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());
@@ -57,7 +57,7 @@ void RosenbrockFunction::Gradient(const MatType& coordinates,
                                   const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);
@@ -79,7 +79,7 @@ void RosenbrockFunction::Gradient(const MatType& coordinates,
  * Evaluate the function and gradient at the given coordinates.
  */
 template<typename MatType, typename GradType>
-typename MatType::elem_type RosenbrockFunction::EvaluateWithGradient(
+typename MatType::Scalar RosenbrockFunction::EvaluateWithGradient(
     const MatType& coordinates,
     GradType& gradient) const
 {

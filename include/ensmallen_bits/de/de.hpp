@@ -94,11 +94,9 @@ class DE
    * @return Objective value of the final point.
    */
   template<typename FunctionType,
-           typename MatType,
-           typename... CallbackTypes>
-  typename MatType::elem_type Optimize(FunctionType& function,
-                                       MatType& iterate,
-                                       CallbackTypes&&... callbacks);
+           typename MatType>
+  typename MatType::Scalar Optimize(FunctionType& function,
+                                       MatType& iterate);
 
   //! Get the population size.
   size_t PopulationSize() const { return populationSize; }

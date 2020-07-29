@@ -58,7 +58,7 @@ template<typename SeparableFunctionType,
          typename GradType,
          typename... CallbackTypes>
 typename std::enable_if<IsArmaType<GradType>::value,
-typename MatType::elem_type>::type
+typename MatType::Scalar>::type
 SnapshotSGDR<UpdatePolicyType>::Optimize(
     SeparableFunctionType& function,
     MatType& iterate,
@@ -81,7 +81,7 @@ SnapshotSGDR<UpdatePolicyType>::Optimize(
     batchSize = optimizer.BatchSize();
   }
 
-  typename MatType::elem_type overallObjective = optimizer.Optimize(function,
+  typename MatType::Scalar overallObjective = optimizer.Optimize(function,
       iterate, callbacks...);
 
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
@@ -107,7 +107,7 @@ SnapshotSGDR<UpdatePolicyType>::Optimize(
     overallObjective = 0;
     for (size_t i = 0; i < function.NumFunctions(); ++i)
     {
-      const typename MatType::elem_type objective = function.Evaluate(
+      const typename MatType::Scalar objective = function.Evaluate(
           iterate, i, 1);
       overallObjective += objective;
     }

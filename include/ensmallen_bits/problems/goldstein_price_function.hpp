@@ -73,7 +73,7 @@ class GoldsteinPriceFunction
    * @param batchSize Number of points to process.
    */
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates,
+  typename MatType::Scalar Evaluate(const MatType& coordinates,
                                        const size_t begin,
                                        const size_t batchSize) const;
 
@@ -83,7 +83,7 @@ class GoldsteinPriceFunction
    * @param coordinates The function coordinates.
    */
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates) const;
+  typename MatType::Scalar Evaluate(const MatType& coordinates) const;
 
   /**
    * Evaluate the gradient of a function for a particular batch-size.

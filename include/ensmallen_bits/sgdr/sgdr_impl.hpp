@@ -50,7 +50,7 @@ template<typename UpdatePolicyType>
 template<typename SeparableFunctionType, typename MatType, typename GradType,
          typename... CallbackTypes>
 typename std::enable_if<IsArmaType<GradType>::value,
-typename MatType::elem_type>::type
+typename MatType::Scalar>::type
 SGDR<UpdatePolicyType>::Optimize(
     SeparableFunctionType& function,
     MatType& iterate,

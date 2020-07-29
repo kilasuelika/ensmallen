@@ -49,7 +49,7 @@ class UpdateClassic
               MatType& newCoords,
               const size_t numIter)
   {
-    typename MatType::elem_type gamma = 2.0 / (numIter + 2.0);
+    typename MatType::Scalar gamma = 2.0 / (numIter + 2.0);
     newCoords = (1.0 - gamma) * oldCoords + gamma * s;
   }
 };

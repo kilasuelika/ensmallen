@@ -32,9 +32,9 @@ class TestFuncFW
    *
    * @param coords input vector x.
    */
-  typename MatType::elem_type Evaluate(const MatType& coords)
+  typename MatType::Scalar Evaluate(const MatType& coords)
   {
-    typename MatType::elem_type f = std::pow(coords[0] - 0.1, 2);
+    typename MatType::Scalar f = std::pow(coords[0] - 0.1, 2);
     f += std::pow(coords[1] - 0.2, 2);
     f += std::pow(coords[2] - 0.3, 2);
     return f;

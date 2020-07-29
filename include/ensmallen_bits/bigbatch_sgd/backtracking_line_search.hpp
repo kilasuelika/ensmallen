@@ -94,7 +94,7 @@ class BacktrackingLineSearch
       if (reset)
         stepSize *= 2;
 
-      typedef typename MatType::elem_type ElemType;
+      typedef typename MatType::Scalar ElemType;
 
       ElemType overallObjective = function.Evaluate(iterate, offset,
           backtrackingBatchSize);

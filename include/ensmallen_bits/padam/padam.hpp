@@ -107,7 +107,7 @@ class Padam
            typename MatType,
            typename GradType,
            typename... CallbackTypes>
-  typename MatType::elem_type Optimize(SeparableFunctionType& function,
+  typename MatType::Scalar Optimize(SeparableFunctionType& function,
                                        MatType& iterate,
                                        CallbackTypes&&... callbacks)
   {
@@ -120,7 +120,7 @@ class Padam
   template<typename SeparableFunctionType,
            typename MatType,
            typename... CallbackTypes>
-  typename MatType::elem_type Optimize(SeparableFunctionType& function,
+  typename MatType::Scalar Optimize(SeparableFunctionType& function,
                                        MatType& iterate,
                                        CallbackTypes&&... callbacks)
   {

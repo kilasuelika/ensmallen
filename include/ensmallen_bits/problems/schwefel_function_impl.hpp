@@ -34,12 +34,12 @@ inline void SchwefelFunction::Shuffle()
 }
 
 template<typename MatType>
-typename MatType::elem_type SchwefelFunction::Evaluate(
+typename MatType::Scalar SchwefelFunction::Evaluate(
     const MatType& coordinates,
     const size_t begin,
     const size_t batchSize) const
 {
-  typename MatType::elem_type objective = 0;
+  typename MatType::Scalar objective = 0;
   for (size_t j = begin; j < begin + batchSize; ++j)
   {
     const size_t p = visitationOrder[j];
@@ -51,7 +51,7 @@ typename MatType::elem_type SchwefelFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type SchwefelFunction::Evaluate(
+typename MatType::Scalar SchwefelFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());

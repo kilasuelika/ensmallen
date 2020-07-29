@@ -13,8 +13,6 @@
 #ifndef ENSMALLEN_LBFGS_LBFGS_HPP
 #define ENSMALLEN_LBFGS_LBFGS_HPP
 
-#include <ensmallen_bits/function.hpp>
-
 namespace ens {
 
 /**
@@ -77,27 +75,10 @@ class L_BFGS
    * @return Objective value of the final point.
    */
   template<typename FunctionType,
-           typename MatType,
-           typename GradType,
-           typename... CallbackTypes>
-  typename std::enable_if<IsArmaType<GradType>::value,
-      typename MatType::elem_type>::type
+           typename MatType>
+  typename MatType::Scalar
   Optimize(FunctionType& function,
-           MatType& iterate,
-           CallbackTypes&&... callbacks);
-
-  //! Forward the MatType as GradType.
-  template<typename SeparableFunctionType,
-           typename MatType,
-           typename... CallbackTypes>
-  typename MatType::elem_type Optimize(SeparableFunctionType& function,
-                                       MatType& iterate,
-                                       CallbackTypes&&... callbacks)
-  {
-    return Optimize<SeparableFunctionType, MatType, MatType,
-        CallbackTypes...>(function, iterate,
-        std::forward<CallbackTypes>(callbacks)...);
-  }
+           MatType& iterate);
 
   //! Get the memory size.
   size_t NumBasis() const { return numBasis; }
@@ -176,11 +157,11 @@ class L_BFGS
    * @param s Differences between the iterate and old iterate matrix.
    * @param y Differences between the gradient and the old gradient matrix.
    */
-  template<typename MatType, typename CubeType>
+  template<typename MatType>
   double ChooseScalingFactor(const size_t iterationNum,
                              const MatType& gradient,
-                             const CubeType& s,
-                             const CubeType& y);
+                             const std::vector<MatType>& s,
+                             const std::vector<MatType>& y);
 
   /**
    * Perform a back-tracking line search along the search direction to
@@ -199,17 +180,14 @@ class L_BFGS
    */
   template<typename FunctionType,
            typename ElemType,
-           typename MatType,
-           typename GradType,
-           typename... CallbackTypes>
+           typename MatType>
   bool LineSearch(FunctionType& function,
                   ElemType& functionValue,
                   MatType& iterate,
-                  GradType& gradient,
+                  MatType& gradient,
                   MatType& newIterateTmp,
-                  const GradType& searchDirection,
-                  double& finalStepSize,
-                  CallbackTypes&... callbacks);
+                  const MatType& searchDirection,
+                  double& finalStepSize);
 
   /**
    * Find the L-BFGS search direction.
@@ -221,13 +199,13 @@ class L_BFGS
    * @param y Differences between the gradient and the old gradient matrix.
    * @param searchDirection Vector to store search direction in.
    */
-  template<typename MatType, typename CubeType>
-  void SearchDirection(const MatType& gradient,
-                       const size_t iterationNum,
-                       const double scalingFactor,
-                       const CubeType& s,
-                       const CubeType& y,
-                       MatType& searchDirection);
+template<typename MatType>
+void SearchDirection(const MatType& gradient,
+                             const size_t iterationNum,
+                             const double scalingFactor,
+                             const std::vector<MatType>& s,
+                             const std::vector<MatType>& y,
+                             MatType& searchDirection);
 
   /**
    * Update the y and s matrices, which store the differences
@@ -242,14 +220,14 @@ class L_BFGS
    * @param s Differences between the iterate and old iterate matrix.
    * @param y Differences between the gradient and the old gradient matrix.
    */
-  template<typename MatType, typename GradType, typename CubeType>
-  void UpdateBasisSet(const size_t iterationNum,
-                      const MatType& iterate,
-                      const MatType& oldIterate,
-                      const GradType& gradient,
-                      const GradType& oldGradient,
-                      CubeType& s,
-                      CubeType& y);
+template<typename MatType>
+void UpdateBasisSet(const size_t iterationNum,
+                            const MatType& iterate,
+                            const MatType& oldIterate,
+                            const MatType& gradient,
+                            const MatType& oldGradient,
+                            std::vector<MatType>& s,
+                            std::vector<MatType>& y);
 };
 
 } // namespace ens

@@ -72,7 +72,7 @@ class LRSDP
    * @param callbacks Callback functions.
    */
   template<typename MatType, typename... CallbackTypes>
-  typename MatType::elem_type Optimize(MatType& coordinates,
+  typename MatType::Scalar Optimize(MatType& coordinates,
                                        CallbackTypes&&... callbacks);
 
   //! Return the SDP that will be solved.

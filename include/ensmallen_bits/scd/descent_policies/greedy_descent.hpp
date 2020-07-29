@@ -51,7 +51,7 @@ class GreedyDescent
                                const MatType& iterate,
                                const ResolvableFunctionType& function)
   {
-    typedef typename MatType::elem_type ElemType;
+    typedef typename MatType::Scalar ElemType;
 
     size_t bestFeature = 0;
     ElemType bestDescent = 0;

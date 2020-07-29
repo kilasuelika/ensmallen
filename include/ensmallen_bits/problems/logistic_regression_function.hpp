@@ -67,7 +67,7 @@ class LogisticRegressionFunction
    *
    * @param parameters Vector of logistic regression parameters.
    */
-  typename MatType::elem_type Evaluate(const MatType& parameters) const;
+  typename MatType::Scalar Evaluate(const MatType& parameters) const;
 
   /**
    * Evaluate the logistic regression log-likelihood function with the given
@@ -86,7 +86,7 @@ class LogisticRegressionFunction
    * @param batchSize Number of points to be passed at a time to use for
    *     objective function evaluation.
    */
-  typename MatType::elem_type Evaluate(const MatType& parameters,
+  typename MatType::Scalar Evaluate(const MatType& parameters,
                                        const size_t begin,
                                        const size_t batchSize = 1) const;
 
@@ -139,12 +139,12 @@ class LogisticRegressionFunction
    * log-likelihood function simultaneously with the given parameters.
    */
   template<typename GradType>
-  typename MatType::elem_type EvaluateWithGradient(
+  typename MatType::Scalar EvaluateWithGradient(
       const MatType& parameters,
       GradType& gradient) const;
 
   template<typename GradType>
-  typename MatType::elem_type EvaluateWithGradient(
+  typename MatType::Scalar EvaluateWithGradient(
       const MatType& parameters,
       const size_t begin,
       GradType& gradient,

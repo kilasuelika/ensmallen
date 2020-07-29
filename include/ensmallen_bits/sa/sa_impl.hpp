@@ -45,13 +45,13 @@ SA<CoolingScheduleType>::SA(
 //! Optimize the function (minimize).
 template<typename CoolingScheduleType>
 template<typename FunctionType, typename MatType, typename... CallbackTypes>
-typename MatType::elem_type SA<CoolingScheduleType>::Optimize(
+typename MatType::Scalar SA<CoolingScheduleType>::Optimize(
     FunctionType& function,
     MatType& iterateIn,
     CallbackTypes&&... callbacks)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
 
   // Make sure we have the methods that we need.
@@ -137,12 +137,12 @@ void SA<CoolingScheduleType>::GenerateMove(
     MatType& iterate,
     MatType& accept,
     MatType& moveSize,
-    typename MatType::elem_type& energy,
+    typename MatType::Scalar& energy,
     size_t& idx,
     size_t& sweepCounter,
     CallbackTypes&... callbacks)
 {
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   const ElemType prevEnergy = energy;
   const ElemType prevValue = iterate(idx);

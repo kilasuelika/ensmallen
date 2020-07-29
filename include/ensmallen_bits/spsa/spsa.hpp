@@ -79,7 +79,7 @@ class SPSA
   template<typename ArbitraryFunctionType,
            typename MatType,
            typename... CallbackTypes>
-  typename MatType::elem_type Optimize(ArbitraryFunctionType& function,
+  typename MatType::Scalar Optimize(ArbitraryFunctionType& function,
                                        MatType& iterate,
                                        CallbackTypes&&... callbacks);
 

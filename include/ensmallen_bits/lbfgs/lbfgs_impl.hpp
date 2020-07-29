@@ -14,9 +14,7 @@
 #define ENSMALLEN_LBFGS_LBFGS_IMPL_HPP
 
 // In case it hasn't been included yet.
-#include "lbfgs.hpp"
-
-#include <ensmallen_bits/function.hpp>
+#include<vector>
 
 namespace ens {
 
@@ -71,26 +69,27 @@ inline L_BFGS::L_BFGS(const size_t numBasis,
  * @param s Differences between the iterate and old iterate matrix.
  * @param y Differences between the gradient and the old gradient matrix.
  */
-template<typename MatType, typename CubeType>
+template<typename MatType>
 double L_BFGS::ChooseScalingFactor(const size_t iterationNum,
                                    const MatType& gradient,
-                                   const CubeType& s,
-                                   const CubeType& y)
+                                   const std::vector<MatType>& s,
+                                   const std::vector<MatType>& y)
 {
-  typedef typename CubeType::elem_type CubeElemType;
+  typedef typename MatType::Scalar ElemType;
 
   double scalingFactor = 1.0;
   if (iterationNum > 0)
   {
     int previousPos = (iterationNum - 1) % numBasis;
     // Get s and y matrices once instead of multiple times.
-    const arma::Mat<CubeElemType>& sMat = s.slice(previousPos);
-    const arma::Mat<CubeElemType>& yMat = y.slice(previousPos);
-    scalingFactor = dot(sMat, yMat) / dot(yMat, yMat);
+	const auto& sMat=s[previousPos];
+	const auto& yMat=y[previousPos];
+	scalingFactor= sMat.dot(yMat)/yMat.dot(yMat);
   }
   else
   {
-    scalingFactor = 1.0 / sqrt(dot(gradient, gradient));
+    //scalingFactor = 1.0 / sqrt(dot(gradient, gradient));
+	scalingFactor = 1.0 / sqrt(gradient.dot(gradient));
   }
 
   return scalingFactor;
@@ -106,12 +105,12 @@ double L_BFGS::ChooseScalingFactor(const size_t iterationNum,
  * @param y Differences between the gradient and the old gradient matrix.
  * @param searchDirection Vector to store search direction in.
  */
-template<typename MatType, typename CubeType>
+template<typename MatType>
 void L_BFGS::SearchDirection(const MatType& gradient,
                              const size_t iterationNum,
                              const double scalingFactor,
-                             const CubeType& s,
-                             const CubeType& y,
+                             const std::vector<MatType>& s,
+                             const std::vector<MatType>& y,
                              MatType& searchDirection)
 {
   // Start from this point.
@@ -119,21 +118,23 @@ void L_BFGS::SearchDirection(const MatType& gradient,
 
   // See "A Recursive Formula to Compute H * g" in "Updating quasi-Newton
   // matrices with limited storage" (Nocedal, 1980).
-  typedef typename CubeType::elem_type CubeElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // Temporary variables.
-  arma::Col<CubeElemType> rho(numBasis);
-  arma::Col<CubeElemType> alpha(numBasis);
-
+  //arma::Col<CubeElemType> rho(numBasis);
+  //arma::Col<CubeElemType> alpha(numBasis);
+	Eigen::Matrix<ElemType,Eigen::Dynamic,1> rho(numBasis), alpha(numBasis);
   size_t limit = (numBasis > iterationNum) ? 0 : (iterationNum - numBasis);
   for (size_t i = iterationNum; i != limit; i--)
   {
     int translatedPosition = (i + (numBasis - 1)) % numBasis;
-    rho[iterationNum - i] = 1.0 / arma::dot(y.slice(translatedPosition),
-                                            s.slice(translatedPosition));
-    alpha[iterationNum - i] = rho[iterationNum - i] *
-        arma::dot(s.slice(translatedPosition), searchDirection);
-    searchDirection -= alpha[iterationNum - i] * y.slice(translatedPosition);
+    //rho.coeffRef(iterationNum - i) = 1.0 / arma::dot(y.slice(translatedPosition),
+    //                                        s.slice(translatedPosition));
+	rho.coeffRef(iterationNum - i) = 1.0 / y[translatedPosition].dot(s[translatedPosition]);
+    //alpha[iterationNum - i] = rho[iterationNum - i] *
+    //    arma::dot(s.slice(translatedPosition), searchDirection);
+	alpha.coeffRef(iterationNum - i)=rho[iterationNum - i] *s[translatedPosition].dot(searchDirection);
+    searchDirection -= alpha.coeff(iterationNum - i) * y[translatedPosition];
   }
 
   searchDirection *= scalingFactor;
@@ -141,10 +142,10 @@ void L_BFGS::SearchDirection(const MatType& gradient,
   for (size_t i = limit; i < iterationNum; i++)
   {
     int translatedPosition = i % numBasis;
-    double beta = rho[iterationNum - i - 1] *
-        arma::dot(y.slice(translatedPosition), searchDirection);
-    searchDirection += (alpha[iterationNum - i - 1] - beta) *
-        s.slice(translatedPosition);
+    double beta = rho.coeffRef(iterationNum - i - 1) *
+        y[translatedPosition].dot(searchDirection);
+    searchDirection += (alpha.coeff(iterationNum - i - 1) - beta) *
+        s[translatedPosition];
   }
 
   // Negate the search direction so that it is a descent direction.
@@ -164,20 +165,20 @@ void L_BFGS::SearchDirection(const MatType& gradient,
  * @param s Differences between the iterate and old iterate matrix.
  * @param y Differences between the gradient and the old gradient matrix.
  */
-template<typename MatType, typename GradType, typename CubeType>
+template<typename MatType>
 void L_BFGS::UpdateBasisSet(const size_t iterationNum,
                             const MatType& iterate,
                             const MatType& oldIterate,
-                            const GradType& gradient,
-                            const GradType& oldGradient,
-                            CubeType& s,
-                            CubeType& y)
+                            const MatType& gradient,
+                            const MatType& oldGradient,
+                            std::vector<MatType>& s,
+                            std::vector<MatType>& y)
 {
   // Overwrite a certain position instead of pushing everything in the vector
   // back one position.
   int overwritePos = iterationNum % numBasis;
-  s.slice(overwritePos) = iterate - oldIterate;
-  y.slice(overwritePos) = gradient - oldGradient;
+  s[overwritePos] = iterate - oldIterate;
+  y[overwritePos] = gradient - oldGradient;
 }
 
 /**
@@ -196,17 +197,14 @@ void L_BFGS::UpdateBasisSet(const size_t iterationNum,
  */
 template<typename FunctionType,
          typename ElemType,
-         typename MatType,
-         typename GradType,
-         typename... CallbackTypes>
+         typename MatType>
 bool L_BFGS::LineSearch(FunctionType& function,
                         ElemType& functionValue,
                         MatType& iterate,
-                        GradType& gradient,
+                        MatType& gradient,
                         MatType& newIterateTmp,
-                        const GradType& searchDirection,
-                        double& finalStepSize,
-                        CallbackTypes&... callbacks)
+                        const MatType& searchDirection,
+                        double& finalStepSize)
 {
   // Default first step size of 1.0.
   double stepSize = 1.0;
@@ -215,12 +213,13 @@ bool L_BFGS::LineSearch(FunctionType& function,
   // The initial linear term approximation in the direction of the
   // search direction.
   ElemType initialSearchDirectionDotGradient =
-      arma::dot(gradient, searchDirection);
+      //arma::dot(gradient, searchDirection);
+	  gradient.dot(searchDirection);
 
   // If it is not a descent direction, just report failure.
   if (initialSearchDirectionDotGradient > 0.0)
   {
-    Warn << "L-BFGS line search direction is not a descent direction "
+    std::cout << "L-BFGS line search direction is not a descent direction "
         << "(terminating)!" << std::endl;
     return false;
   }
@@ -250,9 +249,6 @@ bool L_BFGS::LineSearch(FunctionType& function,
     newIterateTmp += stepSize * searchDirection;
     functionValue = function.EvaluateWithGradient(newIterateTmp, gradient);
 
-    terminate |= Callback::EvaluateWithGradient(*this, function, newIterateTmp,
-        functionValue, gradient, callbacks...);
-
     if (functionValue < bestObjective)
     {
       bestStepSize = stepSize;
@@ -268,8 +264,7 @@ bool L_BFGS::LineSearch(FunctionType& function,
     else
     {
       // Check Wolfe's condition.
-      ElemType searchDirectionDotGradient = arma::dot(gradient,
-          searchDirection);
+      ElemType searchDirectionDotGradient = gradient.dot(searchDirection);
 
       if (searchDirectionDotGradient < wolfe *
           initialSearchDirectionDotGradient)
@@ -319,71 +314,45 @@ bool L_BFGS::LineSearch(FunctionType& function,
  * @param callbacks Callback functions.
  */
 template<typename FunctionType,
-         typename MatType,
-         typename GradType,
-         typename... CallbackTypes>
-typename std::enable_if<IsArmaType<GradType>::value,
-typename MatType::elem_type>::type
-L_BFGS::Optimize(FunctionType& function,
-                 MatType& iterateIn,
-                 CallbackTypes&&... callbacks)
+         typename MatType>
+typename MatType::Scalar L_BFGS::Optimize(FunctionType& function,
+                 MatType& iterate)
 {
+	
+	using namespace Eigen;
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
-  typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
-  typedef typename MatTypeTraits<GradType>::BaseMatType BaseGradType;
-
-  // Use the Function<> wrapper to ensure the function has all of the functions
-  // that we need.
-  typedef Function<FunctionType, BaseMatType, BaseGradType> FullFunctionType;
-  FullFunctionType& f = static_cast<FullFunctionType&>(function);
-
-  // Check that we have all the functions we will need.
-  traits::CheckFunctionTypeAPI<FullFunctionType, BaseMatType, BaseGradType>();
-  RequireFloatingPointType<BaseMatType>();
-  RequireFloatingPointType<BaseGradType>();
-  RequireSameInternalTypes<BaseMatType, BaseGradType>();
-
-  BaseMatType& iterate = (BaseMatType&) iterateIn;
-
+  typedef typename MatType::Scalar ElemType;
+  
   // Ensure that the cubes holding past iterations' information are the right
   // size.  Also set the current best point value to the maximum.
-  const size_t rows = iterate.n_rows;
-  const size_t cols = iterate.n_cols;
+  const size_t rows = iterate.rows();
+  const size_t cols = iterate.cols();
 
-  BaseMatType newIterateTmp(rows, cols);
-  arma::Cube<ElemType> s(rows, cols, numBasis);
-  arma::Cube<ElemType> y(rows, cols, numBasis);
+  MatType newIterateTmp(rows, cols);
+  //arma::Cube<ElemType> s(rows, cols, numBasis);
+  std::vector<MatType> s(numBasis,MatType(rows)),y(numBasis,MatType(rows));
 
   // The old iterate to be saved.
-  BaseMatType oldIterate(iterate.n_rows, iterate.n_cols);
-  oldIterate.zeros();
-
+  MatType oldIterate(iterate.rows());
+  
   // Whether to optimize until convergence.
   bool optimizeUntilConvergence = (maxIterations == 0);
 
   // The gradient: the current and the old.
-  BaseGradType gradient(iterate.n_rows, iterate.n_cols);
-  gradient.zeros();
-  BaseGradType oldGradient(iterate.n_rows, iterate.n_cols);
-  oldGradient.zeros();
+  MatType gradient(iterate.rows());
+  MatType oldGradient(iterate.rows());
 
   // The search direction.
-  BaseGradType searchDirection(iterate.n_rows, iterate.n_cols);
-  searchDirection.zeros();
+  MatType searchDirection(iterate.rows());
 
   // The initial function value and gradient.
-  ElemType functionValue = f.EvaluateWithGradient(iterate, gradient);
-
-  terminate |= Callback::EvaluateWithGradient(*this, f, iterate,
-        functionValue, gradient, callbacks...);
+  ElemType functionValue = function.EvaluateWithGradient(iterate, gradient);
 
   ElemType prevFunctionValue = functionValue;
 
   // The main optimization loop.
-  terminate |= Callback::BeginOptimization(*this, f, iterate, callbacks...);
   for (size_t itNum = 0; (optimizeUntilConvergence || (itNum != maxIterations))
-      && !terminate; ++itNum)
+	  ; ++itNum)
   {
     prevFunctionValue = functionValue;
 
@@ -391,9 +360,9 @@ L_BFGS::Optimize(FunctionType& function,
     //
     // But don't do this on the first iteration to ensure we always take at
     // least one descent step.
-    if (itNum > 0 && (arma::norm(gradient, 2) < minGradientNorm))
+    if (itNum > 0 && gradient.norm() < minGradientNorm)
     {
-      Info << "L-BFGS gradient norm too small (terminating successfully)."
+      std::cout << "L-BFGS gradient norm too small (terminating successfully)."
           << std::endl;
       break;
     }
@@ -401,7 +370,7 @@ L_BFGS::Optimize(FunctionType& function,
     // Break if the objective is not a number.
     if (std::isnan(functionValue))
     {
-      Warn << "L-BFGS terminated with objective " << functionValue << "; "
+      std::cout << "L-BFGS terminated with objective " << functionValue << "; "
           << "are the objective and gradient functions implemented correctly?"
           << std::endl;
       break;
@@ -411,7 +380,7 @@ L_BFGS::Optimize(FunctionType& function,
     double scalingFactor = ChooseScalingFactor(itNum, gradient, s, y);
     if (scalingFactor == 0.0)
     {
-      Info << "L-BFGS scaling factor computed as 0 (terminating successfully)."
+      std::cout << "L-BFGS scaling factor computed as 0 (terminating successfully)."
           << std::endl;
       break;
     }
@@ -425,10 +394,10 @@ L_BFGS::Optimize(FunctionType& function,
     oldGradient = gradient;
 
     double stepSize; // Set by LineSearch().
-    if (!LineSearch(f, functionValue, iterate, gradient, newIterateTmp,
-        searchDirection, stepSize, callbacks...))
+    if (!LineSearch(function, functionValue, iterate, gradient, newIterateTmp,
+        searchDirection, stepSize))
     {
-      Warn << "Line search failed.  Stopping optimization." << std::endl;
+      std::cout << "Line search failed.  Stopping optimization." << std::endl;
       break; // The line search failed; nothing else to try.
     }
 
@@ -436,7 +405,7 @@ L_BFGS::Optimize(FunctionType& function,
     // In this case we terminate successfully.
     if (stepSize == 0.0)
     {
-      Info << "L-BFGS step size of 0 (terminating successfully)."
+      std::cout << "L-BFGS step size of 0 (terminating successfully)."
           << std::endl;
       break;
     }
@@ -448,7 +417,7 @@ L_BFGS::Optimize(FunctionType& function,
         (ElemType) 1.0);
     if ((prevFunctionValue - functionValue) / denom <= factr)
     {
-      Info << "L-BFGS function value stable (terminating successfully)."
+      std::cout << "L-BFGS function value stable (terminating successfully)."
           << std::endl;
       break;
     }
@@ -456,10 +425,9 @@ L_BFGS::Optimize(FunctionType& function,
     // Overwrite an old basis set.
     UpdateBasisSet(itNum, iterate, oldIterate, gradient, oldGradient, s, y);
 
-    terminate |= Callback::StepTaken(*this, f, iterate, callbacks...);
+    
   } // End of the optimization loop.
 
-  Callback::EndOptimization(*this, f, iterate, callbacks...);
   return functionValue;
 }
 

@@ -126,7 +126,7 @@ class SPALeRAStepsize
      * @return Stop or continue the learning process.
      */
     bool Update(const double stepSize,
-                const typename MatType::elem_type objective,
+                const typename MatType::Scalar objective,
                 const size_t batchSize,
                 const size_t numFunctions,
                 MatType& iterate,
@@ -189,7 +189,7 @@ class SPALeRAStepsize
         const double paramStd = (parent.alpha / std::sqrt(iterate.n_elem)) /
             std::sqrt(iterate.n_elem);
 
-        const typename MatType::elem_type normGradient =
+        const typename MatType::Scalar normGradient =
             std::sqrt(arma::accu(arma::pow(gradient, 2)));
 
         relaxedSums *= (1 - parent.alpha);
@@ -225,7 +225,7 @@ class SPALeRAStepsize
     double mn;
 
     //! Page-Hinkley update parameter.
-    typename MatType::elem_type relaxedObjective;
+    typename MatType::Scalar relaxedObjective;
 
     //! Page-Hinkley step counter.
     size_t phCounter;

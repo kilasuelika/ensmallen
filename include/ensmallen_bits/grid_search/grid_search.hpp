@@ -40,7 +40,7 @@ class GridSearch
    * @return Objective value of the final point.
    */
   template<typename FunctionType, typename MatType>
-  typename MatType::elem_type Optimize(
+  typename MatType::Scalar Optimize(
       FunctionType& function,
       MatType& bestParameters,
       const std::vector<bool>& categoricalDimensions,
@@ -57,7 +57,7 @@ class GridSearch
   template<typename FunctionType, typename MatType>
   void Optimize(
       FunctionType& function,
-      typename MatType::elem_type& bestObjective,
+      typename MatType::Scalar& bestObjective,
       MatType& bestParameters,
       MatType& currentParameters,
       const std::vector<bool>& categoricalDimensions,

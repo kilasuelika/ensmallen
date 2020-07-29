@@ -30,7 +30,7 @@ inline RosenbrockWoodFunction::RosenbrockWoodFunction() : rf(4), wf()
 inline void RosenbrockWoodFunction::Shuffle() { /* Nothing to do here */ }
 
 template<typename MatType>
-typename MatType::elem_type RosenbrockWoodFunction::Evaluate(
+typename MatType::Scalar RosenbrockWoodFunction::Evaluate(
     const MatType& coordinates,
     const size_t /* begin */,
     const size_t /* batchSize */) const
@@ -39,7 +39,7 @@ typename MatType::elem_type RosenbrockWoodFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type RosenbrockWoodFunction::Evaluate(
+typename MatType::Scalar RosenbrockWoodFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());
@@ -52,7 +52,7 @@ inline void RosenbrockWoodFunction::Gradient(const MatType& coordinates,
                                              const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   gradient.set_size(4, 2);
 

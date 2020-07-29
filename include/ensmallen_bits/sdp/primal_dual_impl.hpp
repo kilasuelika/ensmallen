@@ -72,7 +72,7 @@ Alpha(const MatType& a, const MatType& dA, double tau, double& alpha)
 
   // TODO(stephentu): We only want the top eigenvalue, we should
   // be able to do better than full eigen-decomposition.
-  arma::Col<typename MatType::elem_type> evals;
+  arma::Col<typename MatType::Scalar> evals;
   if (!arma::eig_sym(evals, -lInv * dA * lInv.t()))
     return false;
   const double alphahatInv = evals(evals.n_elem - 1);
@@ -187,7 +187,7 @@ SolveKKTSystem(const SparseConstraintType& aSparse,
 }
 
 template<typename SDPType, typename MatType, typename... CallbackTypes>
-typename MatType::elem_type PrimalDualSolver::Optimize(
+typename MatType::Scalar PrimalDualSolver::Optimize(
     const SDPType& sdp,
     MatType& coordinates,
     CallbackTypes&&... callbacks)
@@ -201,7 +201,7 @@ typename MatType::elem_type PrimalDualSolver::Optimize(
 }
 
 template<typename SDPType, typename MatType, typename... CallbackTypes>
-typename MatType::elem_type PrimalDualSolver::Optimize(
+typename MatType::Scalar PrimalDualSolver::Optimize(
     const SDPType& sdp,
     MatType& coordinates,
     MatType& ySparse,
@@ -388,7 +388,7 @@ typename MatType::elem_type PrimalDualSolver::Optimize(
           aDense * eInvFaDenseT;
     }
 
-    const typename MatType::elem_type sxdotsz = arma::dot(sx, sz);
+    const typename MatType::Scalar sxdotsz = arma::dot(sx, sz);
 
     // TODO(stephentu): computing these alphahats should take advantage of
     // the cholesky decomposition of X and Z which we should have available

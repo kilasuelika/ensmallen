@@ -44,13 +44,13 @@ template<typename SelectionPolicyType>
 template<typename SeparableFunctionType,
          typename MatType,
          typename... CallbackTypes>
-typename MatType::elem_type CMAES<SelectionPolicyType>::Optimize(
+typename MatType::Scalar CMAES<SelectionPolicyType>::Optimize(
     SeparableFunctionType& function,
     MatType& iterateIn,
     CallbackTypes&&... callbacks)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
 
   // Make sure that we have the methods that we need.  Long name...

@@ -34,12 +34,12 @@ inline void StyblinskiTangFunction::Shuffle()
 }
 
 template<typename MatType>
-typename MatType::elem_type StyblinskiTangFunction::Evaluate(
+typename MatType::Scalar StyblinskiTangFunction::Evaluate(
     const MatType& coordinates,
     const size_t begin,
     const size_t batchSize) const
 {
-  typename MatType::elem_type objective = 0.0;
+  typename MatType::Scalar objective = 0.0;
   for (size_t j = begin; j < begin + batchSize; ++j)
   {
     const size_t p = visitationOrder[j];
@@ -52,7 +52,7 @@ typename MatType::elem_type StyblinskiTangFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type StyblinskiTangFunction::Evaluate(
+typename MatType::Scalar StyblinskiTangFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());

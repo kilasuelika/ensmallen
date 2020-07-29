@@ -38,13 +38,13 @@ template<typename VelocityUpdatePolicy,
 template<typename ArbitraryFunctionType,
          typename MatType,
          typename... CallbackTypes>
-typename MatType::elem_type PSOType<VelocityUpdatePolicy, InitPolicy>::Optimize(
+typename MatType::Scalar PSOType<VelocityUpdatePolicy, InitPolicy>::Optimize(
     ArbitraryFunctionType& function,
     MatType& iterateIn,
     CallbackTypes&&... callbacks)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
 
   // The update policy internally use a templated class so that

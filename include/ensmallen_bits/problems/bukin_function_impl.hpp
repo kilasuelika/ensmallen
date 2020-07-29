@@ -24,13 +24,13 @@ inline BukinFunction::BukinFunction(const double epsilon) : epsilon(epsilon)
 inline void BukinFunction::Shuffle() { /* Nothing to do here */ }
 
 template<typename MatType>
-typename MatType::elem_type BukinFunction::Evaluate(
+typename MatType::Scalar BukinFunction::Evaluate(
     const MatType& coordinates,
     const size_t /* begin */,
     const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);
@@ -43,7 +43,7 @@ typename MatType::elem_type BukinFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type BukinFunction::Evaluate(
+typename MatType::Scalar BukinFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());
@@ -56,7 +56,7 @@ inline void BukinFunction::Gradient(const MatType& coordinates,
                                     const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);

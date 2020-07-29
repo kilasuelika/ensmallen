@@ -34,13 +34,13 @@ inline void RastriginFunction::Shuffle()
 }
 
 template<typename MatType>
-typename MatType::elem_type RastriginFunction::Evaluate(
+typename MatType::Scalar RastriginFunction::Evaluate(
     const MatType& coordinates,
     const size_t begin,
     const size_t batchSize) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   ElemType objective = 0.0;
   for (size_t j = begin; j < begin + batchSize; ++j)
@@ -55,7 +55,7 @@ typename MatType::elem_type RastriginFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type RastriginFunction::Evaluate(
+typename MatType::Scalar RastriginFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());

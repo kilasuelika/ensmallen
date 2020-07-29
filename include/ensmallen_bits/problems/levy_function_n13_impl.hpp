@@ -23,13 +23,13 @@ inline LevyFunctionN13::LevyFunctionN13() { /* Nothing to do here */ }
 inline void LevyFunctionN13::Shuffle() { /* Nothing to do here */ }
 
 template<typename MatType>
-typename MatType::elem_type LevyFunctionN13::Evaluate(
+typename MatType::Scalar LevyFunctionN13::Evaluate(
     const MatType& coordinates,
     const size_t /* begin */,
     const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);
@@ -45,7 +45,7 @@ typename MatType::elem_type LevyFunctionN13::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type LevyFunctionN13::Evaluate(
+typename MatType::Scalar LevyFunctionN13::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());
@@ -58,7 +58,7 @@ inline void LevyFunctionN13::Gradient(const MatType& coordinates,
                                       const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);

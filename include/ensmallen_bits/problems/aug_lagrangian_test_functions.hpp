@@ -63,7 +63,7 @@ class GockenbachFunction
   GockenbachFunction(const arma::mat& initialPoint);
 
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates);
+  typename MatType::Scalar Evaluate(const MatType& coordinates);
 
   template<typename MatType, typename GradType>
   void Gradient(const MatType& coordinates, GradType& gradient);
@@ -71,7 +71,7 @@ class GockenbachFunction
   size_t NumConstraints() const { return 2; }
 
   template<typename MatType>
-  typename MatType::elem_type EvaluateConstraint(
+  typename MatType::Scalar EvaluateConstraint(
       const size_t index,
       const MatType& coordinates);
 

@@ -23,13 +23,13 @@ inline DropWaveFunction::DropWaveFunction() { /* Nothing to do here */ }
 inline void DropWaveFunction::Shuffle() { /* Nothing to do here */ }
 
 template<typename MatType>
-typename MatType::elem_type DropWaveFunction::Evaluate(
+typename MatType::Scalar DropWaveFunction::Evaluate(
     const MatType& coordinates,
     const size_t /* begin */,
     const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);
@@ -43,7 +43,7 @@ typename MatType::elem_type DropWaveFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type DropWaveFunction::Evaluate(
+typename MatType::Scalar DropWaveFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, 1);
@@ -56,7 +56,7 @@ inline void DropWaveFunction::Gradient(const MatType& coordinates,
                                        const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);

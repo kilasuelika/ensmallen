@@ -25,13 +25,13 @@ inline AckleyFunction::AckleyFunction(const double c, const double epsilon) :
 inline void AckleyFunction::Shuffle() { /* Nothing to do here */ }
 
 template<typename MatType>
-typename MatType::elem_type AckleyFunction::Evaluate(
+typename MatType::Scalar AckleyFunction::Evaluate(
     const MatType& coordinates,
     const size_t /* begin */,
     const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);
@@ -45,20 +45,20 @@ typename MatType::elem_type AckleyFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type AckleyFunction::Evaluate(
+typename MatType::Scalar AckleyFunction::Evaluate(
     const MatType& coordinates) const
 {
   return Evaluate(coordinates, 0, NumFunctions());
 }
 
-template<typename MatType, typename GradType>
+template<typename MatType>
 inline void AckleyFunction::Gradient(const MatType& coordinates,
                                      const size_t /* begin */,
-                                     GradType& gradient,
+                                     MatType& gradient,
                                      const size_t /* batchSize */) const
 {
   // Convenience typedef.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For convenience; we assume these temporaries will be optimized out.
   const ElemType x1 = coordinates(0);
@@ -70,18 +70,23 @@ inline void AckleyFunction::Gradient(const MatType& coordinates,
   const ElemType t2 = 0.5 * c *
       std::exp(0.5 * (std::cos(c * x1) + std::cos(c * x2)));
 
-  gradient.set_size(2, 1);
-  gradient(0) = (x1 * t1) + (t2 * std::sin(c * x1));
-  gradient(1) = (x2 * t1) + (t2 * std::sin(c * x2));
+  gradient.resize(2);
+  gradient.coeffRef(0) = (x1 * t1) + (t2 * std::sin(c * x1));
+  gradient.coeffRef(1) = (x2 * t1) + (t2 * std::sin(c * x2));
 }
 
-template<typename MatType, typename GradType>
+template<typename MatType>
 inline void AckleyFunction::Gradient(const MatType& coordinates,
-                                     GradType& gradient)
+                                     MatType& gradient)
 {
   Gradient(coordinates, 0, gradient, 1);
 }
 
+template<typename MatType>
+  typename MatType::Scalar AckleyFunction::EvaluateWithGradient(const MatType& coordinates, MatType& gradient){
+	Gradient(coordinates,gradient);
+	return Evaluate(coordinates);
+  };
 } // namespace test
 } // namespace ens
 

@@ -15,23 +15,9 @@
 #ifndef ENSMALLEN_HPP
 #define ENSMALLEN_HPP
 
-// certain compilers are way behind the curve
-#if (defined(_MSVC_LANG) && (_MSVC_LANG >= 201402L))
-  #undef  ARMA_USE_CXX11
-  #define ARMA_USE_CXX11
-#endif
 
 #include <Eigen/Core>
-
-#if !defined(ARMA_USE_CXX11)
-  // armadillo automatically enables ARMA_USE_CXX11
-  // when a C++11/C++14/C++17/etc compiler is detected
-  #error "please enable C++11/C++14 mode in your compiler"
-#endif
-
-#if ((ARMA_VERSION_MAJOR < 8) || ((ARMA_VERSION_MAJOR == 8) && (ARMA_VERSION_MINOR < 400)))
-  #error "need Armadillo version 8.400 or later"
-#endif
+#include "ensmallen_bits/eigen_helper/eigen_helper.hpp"
 
 #include <cmath>
 #include <cstdlib>
@@ -59,16 +45,6 @@
 #include "ensmallen_bits/ens_version.hpp"
 #include "ensmallen_bits/log.hpp" // TODO: should move to another place
 
-#include "ensmallen_bits/utility/any.hpp"
-#include "ensmallen_bits/utility/arma_traits.hpp"
-
-// Callbacks.
-#include "ensmallen_bits/callbacks/callbacks.hpp"
-#include "ensmallen_bits/callbacks/early_stop_at_min_loss.hpp"
-#include "ensmallen_bits/callbacks/print_loss.hpp"
-#include "ensmallen_bits/callbacks/progress_bar.hpp"
-#include "ensmallen_bits/callbacks/store_best_coordinates.hpp"
-#include "ensmallen_bits/callbacks/timer_stop.hpp"
 
 #include "ensmallen_bits/problems/problems.hpp" // TODO: should move to another place
 
@@ -84,8 +60,6 @@
 #include "ensmallen_bits/de/de.hpp"
 #include "ensmallen_bits/eve/eve.hpp"
 #include "ensmallen_bits/ftml/ftml.hpp"
-
-#include "ensmallen_bits/function.hpp" // TODO: should move to function/
 
 #include "ensmallen_bits/fw/frank_wolfe.hpp"
 #include "ensmallen_bits/gradient_descent/gradient_descent.hpp"

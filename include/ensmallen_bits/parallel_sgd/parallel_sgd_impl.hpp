@@ -25,7 +25,7 @@ template<typename MatType>
 inline void UpdateLocation(MatType& iterate,
                            const size_t row,
                            const size_t col,
-                           const typename MatType::elem_type value)
+                           const typename MatType::Scalar value)
 {
   ENS_PRAGMA_OMP_ATOMIC
   iterate(row, col) -= value;
@@ -65,13 +65,13 @@ template <typename SparseFunctionType,
           typename GradType,
           typename... CallbackTypes>
 typename std::enable_if<IsArmaType<GradType>::value,
-typename MatType::elem_type>::type ParallelSGD<DecayPolicyType>::Optimize(
+typename MatType::Scalar>::type ParallelSGD<DecayPolicyType>::Optimize(
     SparseFunctionType& function,
     MatType& iterateIn,
     CallbackTypes&&... callbacks)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
   typedef typename MatTypeTraits<GradType>::BaseMatType BaseGradType;
 

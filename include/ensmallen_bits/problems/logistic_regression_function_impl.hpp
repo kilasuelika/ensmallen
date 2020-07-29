@@ -28,7 +28,7 @@ LogisticRegressionFunction<MatType>::LogisticRegressionFunction(
     responses(responses),
     lambda(lambda)
 {
-  initialPoint = arma::Row<typename MatType::elem_type>(predictors.n_rows + 1,
+  initialPoint = arma::Row<typename MatType::Scalar>(predictors.n_rows + 1,
       arma::fill::zeros);
 
   // Sanity check.
@@ -57,7 +57,7 @@ LogisticRegressionFunction<MatType>::LogisticRegressionFunction(
   // To check if initialPoint is compatible with predictors.
   if (initialPoint.n_rows != (predictors.n_rows + 1) ||
       initialPoint.n_cols != 1)
-    this->initialPoint = arma::Row<typename MatType::elem_type>(
+    this->initialPoint = arma::Row<typename MatType::Scalar>(
         predictors.n_rows + 1, arma::fill::zeros);
 }
 
@@ -88,7 +88,7 @@ void LogisticRegressionFunction<MatType>::Shuffle()
  * parameters.
  */
 template<typename MatType>
-typename MatType::elem_type LogisticRegressionFunction<MatType>::Evaluate(
+typename MatType::Scalar LogisticRegressionFunction<MatType>::Evaluate(
     const MatType& parameters) const
 {
   // The objective function is the log-likelihood function (w is the parameters
@@ -97,7 +97,7 @@ typename MatType::elem_type LogisticRegressionFunction<MatType>::Evaluate(
   //   f(w) = sum(y log(sig(w'x)) + (1 - y) log(sig(1 - w'x))).
   // We want to minimize this function.  L2-regularization is just lambda
   // multiplied by the squared l2-norm of the parameters then divided by two.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // For the regularization, we ignore the first term, which is the intercept
   // term and take every term except the last one in the decision variable.
@@ -130,12 +130,12 @@ typename MatType::elem_type LogisticRegressionFunction<MatType>::Evaluate(
  * parameters for a given batch from a given point.
  */
 template<typename MatType>
-typename MatType::elem_type LogisticRegressionFunction<MatType>::Evaluate(
+typename MatType::Scalar LogisticRegressionFunction<MatType>::Evaluate(
     const MatType& parameters,
     const size_t begin,
     const size_t batchSize) const
 {
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // Calculate the regularization term.
   const ElemType regularization = lambda *
@@ -166,7 +166,7 @@ void LogisticRegressionFunction<MatType>::Gradient(
     const MatType& parameters,
     GradType& gradient) const
 {
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   // Regularization term.
   MatType regularization;
   regularization = lambda * parameters.tail_cols(parameters.n_elem - 1);
@@ -190,7 +190,7 @@ void LogisticRegressionFunction<MatType>::Gradient(
                 GradType& gradient,
                 const size_t batchSize) const
 {
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // Regularization term.
   MatType regularization;
@@ -221,7 +221,7 @@ void LogisticRegressionFunction<MatType>::PartialGradient(
     const size_t j,
     arma::sp_mat& gradient) const
 {
-  const arma::Row<typename MatType::elem_type> diffs = responses -
+  const arma::Row<typename MatType::Scalar> diffs = responses -
       (1 / (1 + arma::exp(-parameters(0, 0) -
                           parameters.tail_cols(parameters.n_elem - 1) *
                               predictors)));
@@ -241,12 +241,12 @@ void LogisticRegressionFunction<MatType>::PartialGradient(
 
 template<typename MatType>
 template<typename GradType>
-typename MatType::elem_type
+typename MatType::Scalar
 LogisticRegressionFunction<MatType>::EvaluateWithGradient(
     const MatType& parameters,
     GradType& gradient) const
 {
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // Regularization term.
   MatType regularization = lambda *
@@ -277,14 +277,14 @@ LogisticRegressionFunction<MatType>::EvaluateWithGradient(
 
 template<typename MatType>
 template<typename GradType>
-typename MatType::elem_type
+typename MatType::Scalar
 LogisticRegressionFunction<MatType>::EvaluateWithGradient(
     const MatType& parameters,
     const size_t begin,
     GradType& gradient,
     const size_t batchSize) const
 {
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // Regularization term.
   MatType regularization =

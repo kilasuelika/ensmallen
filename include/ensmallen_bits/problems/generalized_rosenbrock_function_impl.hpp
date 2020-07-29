@@ -46,12 +46,12 @@ inline void GeneralizedRosenbrockFunction::Shuffle()
 }
 
 template<typename MatType>
-typename MatType::elem_type GeneralizedRosenbrockFunction::Evaluate(
+typename MatType::Scalar GeneralizedRosenbrockFunction::Evaluate(
     const MatType& coordinates,
     const size_t begin,
     const size_t batchSize) const
 {
-  typename MatType::elem_type objective = 0.0;
+  typename MatType::Scalar objective = 0.0;
   for (size_t j = begin; j < begin + batchSize; ++j)
   {
     const size_t p = visitationOrder[j];
@@ -63,10 +63,10 @@ typename MatType::elem_type GeneralizedRosenbrockFunction::Evaluate(
 }
 
 template<typename MatType>
-typename MatType::elem_type GeneralizedRosenbrockFunction::Evaluate(
+typename MatType::Scalar GeneralizedRosenbrockFunction::Evaluate(
     const MatType& coordinates) const
 {
-  typename MatType::elem_type fval = 0;
+  typename MatType::Scalar fval = 0;
   for (size_t i = 0; i < (n - 1); i++)
   {
     fval += 100 * std::pow(std::pow(coordinates[i], 2) -

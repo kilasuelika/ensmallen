@@ -42,14 +42,14 @@ template<
 template<typename FunctionType, typename MatType, typename GradType,
          typename... CallbackTypes>
 typename std::enable_if<IsArmaType<GradType>::value,
-typename MatType::elem_type>::type
+typename MatType::Scalar>::type
 FrankWolfe<LinearConstrSolverType, UpdateRuleType>::Optimize(
   FunctionType& function,
   MatType& iterateIn,
   CallbackTypes&&... callbacks)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
   typedef typename MatTypeTraits<GradType>::BaseMatType BaseGradType;
 

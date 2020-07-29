@@ -18,7 +18,7 @@ namespace ens {
 namespace test {
 
 template<typename MatType>
-inline typename MatType::elem_type GDTestFunction::Evaluate(
+inline typename MatType::Scalar GDTestFunction::Evaluate(
     const MatType& coordinates) const
 {
   MatType temp = arma::trans(coordinates) * coordinates;

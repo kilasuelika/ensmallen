@@ -1,6 +1,7 @@
 /**
  * @file de_impl.hpp
  * @author Rahul Ganesh Prabhu
+ * @author Zhou Yao
  *
  * Implementation of Differential Evolution an evolutionary algorithm used for
  * global optimization of arbitrary functions.
@@ -14,6 +15,7 @@
 #define ENSMALLEN_DE_DE_IMPL_HPP
 
 #include "de.hpp"
+#include<random>
 
 namespace ens {
 
@@ -31,29 +33,23 @@ inline DE::DE(const size_t populationSize ,
 
 //!Optimize the function
 template<typename FunctionType,
-         typename MatType,
-         typename... CallbackTypes>
-typename MatType::elem_type DE::Optimize(FunctionType& function,
-                                         MatType& iterateIn,
-                                         CallbackTypes&&... callbacks)
+         typename MatType>
+typename MatType::Scalar DE::Optimize(FunctionType& function,
+                                         MatType& iterateIn)
 {
+	using namespace Eigen;
+	const int nargs=iterateIn.rows()*iterateIn.cols();
+
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
-  typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
-
-  BaseMatType& iterate = (BaseMatType&) iterateIn;
-
+  typedef typename MatType::Scalar ElemType;
+  
   // Population matrix. Each column is a candidate.
-  std::vector<BaseMatType> population;
+  std::vector<MatType> population;
   population.resize(populationSize);
+  
   // Vector of fitness values corresponding to each candidate.
-  arma::Col<ElemType> fitnessValues;
-
-  // Make sure that we have the methods that we need.  Long name...
-  traits::CheckArbitraryFunctionTypeAPI<
-      FunctionType, BaseMatType>();
-  RequireDenseFloatingPointType<BaseMatType>();
-
+  Matrix<ElemType, Dynamic,1> fitnessValues(populationSize);
+  
   // Population Size must be at least 3 for DE to work.
   if (populationSize < 3)
   {
@@ -62,112 +58,101 @@ typename MatType::elem_type DE::Optimize(FunctionType& function,
   }
 
   // Initialize helper variables.
-  fitnessValues.set_size(populationSize);
-  ElemType lastBestFitness = DBL_MAX;
-  BaseMatType bestElement;
-
-  // Controls early termination of the optimization process.
-  bool terminate = false;
+  ElemType lastBestFitness = std::numeric_limits<ElemType>::max();
+  MatType bestElement;
 
   // Generate a population based on a Gaussian distribution around the given
   // starting point. Also finds the best element of the population.
+  eigen_helper::RandGen gen;
   for (size_t i = 0; i < populationSize; i++)
   {
-    population[i].randn(iterate.n_rows, iterate.n_cols);
-    population[i] += iterate;
-    fitnessValues[i] = function.Evaluate(population[i]);
+	population[i].resize(nargs);
+	gen.randn(population[i]);
+    population[i] += iterateIn;
+    fitnessValues.coeffRef(i) = function.Evaluate(population[i]);
 
-    Callback::Evaluate(*this, function, population[i], fitnessValues[i],
-        callbacks...);
-
-    if (fitnessValues[i] < lastBestFitness)
+    if (fitnessValues.coeff(i) < lastBestFitness)
     {
-      lastBestFitness = fitnessValues[i];
+      lastBestFitness = fitnessValues.coeff(i);
       bestElement = population[i];
     }
   }
 
   // Iterate until maximum number of generations are completed.
-  terminate |= Callback::BeginOptimization(*this, function, iterate,
-      callbacks...);
-  for (size_t gen = 0; gen < maxGenerations && !terminate; gen++)
+  //For random integer.
+  std::random_device rd;
+  std::uniform_int_distribution<> dist(0, populationSize-1);
+    
+  for (size_t gen = 0; gen < maxGenerations; gen++)
   {
+	  std::cout<<gen<<std::endl;
     // Generate new population based on /best/1/bin strategy.
     for (size_t member = 0; member < populationSize; member++)
     {
-      iterate = population[member];
+      iterateIn = population[member];
 
       // Generate two different random numbers to choose two random members.
       size_t l = 0, m = 0;
       do
       {
-        l = arma::randi<arma::uword>(arma::distr_param(0, populationSize - 1));
+        l=dist(rd);
       }
       while (l == member);
 
       do
       {
-        m = arma::randi<arma::uword>(arma::distr_param(0, populationSize - 1));
+		m=dist(rd);
       }
       while (m == member && m == l);
 
       // Generate new "mutant" from two randomly chosen members.
-      BaseMatType mutant = bestElement + differentialWeight *
+      MatType mutant = bestElement + differentialWeight *
           (population[l] - population[m]);
 
       // Perform crossover.
-      const BaseMatType cr = arma::randu<BaseMatType>(iterate.n_rows);
-      for (size_t it = 0; it < iterate.n_rows; it++)
+	  VectorXd cr;
+	  cr.setRandom(nargs);
+      for (size_t it = 0; it < iterateIn.rows(); it++)
       {
-        if (cr[it] >= crossoverRate)
+        if (cr.coeff(it) >= crossoverRate)
         {
-          mutant[it] = iterate[it];
+          mutant.coeffRef(it) = iterateIn.coeff(it);
         }
       }
 
-      ElemType iterateValue = function.Evaluate(iterate);
-      Callback::Evaluate(*this, function, iterate, iterateValue, callbacks...);
-
+      ElemType iterateValue = function.Evaluate(iterateIn);
+      
       const ElemType mutantValue = function.Evaluate(mutant);
-      Callback::Evaluate(*this, function, mutant, mutantValue, callbacks...);
-
+      
       // Replace the current member if mutant is better.
       if (mutantValue < iterateValue)
       {
-        iterate = mutant;
+        iterateIn = mutant;
         iterateValue = mutantValue;
-
-        terminate |= Callback::StepTaken(*this, function, iterate,
-            callbacks...);
+   
       }
 
-      fitnessValues[member] = iterateValue;
-      population[member] = iterate;
+      fitnessValues.coeffRef(member) = iterateValue;
+      population[member] = iterateIn;
     }
 
     // Check for termination criteria.
-    if (std::abs(lastBestFitness - fitnessValues.min()) < tolerance)
+    if (std::abs(lastBestFitness - fitnessValues.minCoeff()) < tolerance)
     {
-      Info << "DE: minimized within tolerance " << tolerance << "; "
+      std::cout << "DE: minimized within tolerance " << tolerance << "; "
           << "terminating optimization." << std::endl;
       break;
     }
 
     // Update helper variables.
-    lastBestFitness = fitnessValues.min();
-    for (size_t it = 0; it < populationSize; it++)
-    {
-      if (fitnessValues[it] == lastBestFitness)
-      {
-        bestElement = population[it];
-        break;
-      }
-    }
+	int k;
+	lastBestFitness = fitnessValues.minCoeff(&k);
+	bestElement=population[k];
+	
   }
 
-  iterate = bestElement;
+  iterateIn = bestElement;
 
-  Callback::EndOptimization(*this, function, iterate, callbacks...);
   return lastBestFitness;
 }
 

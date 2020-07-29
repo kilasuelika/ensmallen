@@ -64,8 +64,8 @@ class DefaultInit
                   VecType& particleBestFitnesses)
   {
     // Convenience typedef.
-    typedef typename MatType::elem_type ElemType;
-    typedef typename CubeType::elem_type CubeElemType;
+    typedef typename MatType::Scalar ElemType;
+    typedef typename CubeType::Scalar CubeElemType;
 
     // Randomly initialize the particle positions.
     particlePositions.randu(iterate.n_rows, iterate.n_cols, numParticles);

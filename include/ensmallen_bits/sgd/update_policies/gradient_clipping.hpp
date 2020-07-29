@@ -98,7 +98,7 @@ class GradientClipping
                 const double stepSize,
                 const GradType& gradient)
     {
-      typedef typename GradType::elem_type GradElemType;
+      typedef typename GradType::Scalar GradElemType;
 
       // First, clip the gradient.
       GradType clippedGradient = arma::clamp(gradient,

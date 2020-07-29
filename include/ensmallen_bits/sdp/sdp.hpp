@@ -33,18 +33,18 @@ namespace ens {
  */
 template<typename ObjectiveMatrixType,
          typename DenseConstraintMatrixType =
-             arma::Mat<typename ObjectiveMatrixType::elem_type>,
+             arma::Mat<typename ObjectiveMatrixType::Scalar>,
          typename SparseConstraintMatrixType =
-             arma::SpMat<typename ObjectiveMatrixType::elem_type>,
+             arma::SpMat<typename ObjectiveMatrixType::Scalar>,
          typename BVectorType =
-             arma::Col<typename ObjectiveMatrixType::elem_type>>
+             arma::Col<typename ObjectiveMatrixType::Scalar>>
 class SDP
 {
  public:
   //! Type of objective matrix.
   typedef ObjectiveMatrixType ObjectiveType;
   //! Type of element held by the SDP.
-  typedef typename ObjectiveMatrixType::elem_type ElemType;
+  typedef typename ObjectiveMatrixType::Scalar ElemType;
   //! Type of dense constraints.
   typedef DenseConstraintMatrixType DenseConstraintType;
   //! Type of sparse constraints.

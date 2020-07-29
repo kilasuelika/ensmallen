@@ -205,7 +205,7 @@ class AdaptiveStepsize
                       const size_t offset,
                       const size_t backtrackingBatchSize)
     {
-      typedef typename MatType::elem_type ElemType;
+      typedef typename MatType::Scalar ElemType;
 
       ElemType overallObjective = function.Evaluate(iterate,
           offset, backtrackingBatchSize);

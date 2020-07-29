@@ -64,7 +64,7 @@ class AugLagrangianFunction
    * @return Objective function.
    */
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates) const;
+  typename MatType::Scalar Evaluate(const MatType& coordinates) const;
 
   /**
    * Evaluate the gradient of the Augmented Lagrangian function.

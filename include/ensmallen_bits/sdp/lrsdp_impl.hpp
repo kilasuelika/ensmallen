@@ -28,7 +28,7 @@ LRSDP<SDPType>::LRSDP(const size_t numSparseConstraints,
 
 template<typename SDPType>
 template<typename MatType, typename... CallbackTypes>
-typename MatType::elem_type LRSDP<SDPType>::Optimize(
+typename MatType::Scalar LRSDP<SDPType>::Optimize(
     MatType& coordinates, CallbackTypes&&... callbacks)
 {
   function.RRTAny().Clean();

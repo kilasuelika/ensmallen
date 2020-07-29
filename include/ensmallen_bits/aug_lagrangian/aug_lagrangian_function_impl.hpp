@@ -47,13 +47,13 @@ AugLagrangianFunction<LagrangianFunction>::AugLagrangianFunction(
 // Evaluate the AugLagrangianFunction at the given coordinates.
 template<typename LagrangianFunction>
 template<typename MatType>
-typename MatType::elem_type AugLagrangianFunction<LagrangianFunction>::Evaluate(
+typename MatType::Scalar AugLagrangianFunction<LagrangianFunction>::Evaluate(
     const MatType& coordinates) const
 {
   // The augmented Lagrangian is evaluated as
   //    f(x) + {-lambda_i * c_i(x) + (sigma / 2) c_i(x)^2} for all constraints
 
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   // First get the function's objective value.
   ElemType objective = function.Evaluate(coordinates);

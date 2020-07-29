@@ -39,12 +39,12 @@ inline SPSA::SPSA(const double alpha,
 template<typename ArbitraryFunctionType,
          typename MatType,
          typename... CallbackTypes>
-typename MatType::elem_type SPSA::Optimize(ArbitraryFunctionType& function,
+typename MatType::Scalar SPSA::Optimize(ArbitraryFunctionType& function,
                                            MatType& iterate,
                                            CallbackTypes&&... callbacks)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
 
   // Make sure that we have the methods that we need.

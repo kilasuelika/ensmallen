@@ -18,7 +18,7 @@
 namespace ens {
 
 template<typename FunctionType, typename MatType>
-typename MatType::elem_type GridSearch::Optimize(
+typename MatType::Scalar GridSearch::Optimize(
     FunctionType& function,
     MatType& bestParameters,
     const std::vector<bool>& categoricalDimensions,
@@ -36,7 +36,7 @@ typename MatType::elem_type GridSearch::Optimize(
   }
 
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   ElemType bestObjective = std::numeric_limits<ElemType>::max();
   bestParameters.set_size(categoricalDimensions.size(), 1);
@@ -57,7 +57,7 @@ typename MatType::elem_type GridSearch::Optimize(
 template<typename FunctionType, typename MatType>
 void GridSearch::Optimize(
     FunctionType& function,
-    typename MatType::elem_type& bestObjective,
+    typename MatType::Scalar& bestObjective,
     MatType& bestParameters,
     MatType& currentParameters,
     const std::vector<bool>& categoricalDimensions,
@@ -65,7 +65,7 @@ void GridSearch::Optimize(
     size_t i)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
 
   // Make sure we have the methods that we need.  No restrictions on the matrix

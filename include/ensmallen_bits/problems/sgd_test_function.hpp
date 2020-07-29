@@ -43,7 +43,7 @@ class SGDTestFunction
 
   //! Evaluate a function for a particular batch-size.
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates,
+  typename MatType::Scalar Evaluate(const MatType& coordinates,
                                        const size_t begin,
                                        const size_t batchSize) const;
 

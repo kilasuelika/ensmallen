@@ -5,13 +5,34 @@ This is a fork of Ensmallen using Eigen as backend.
 1. Remove checks.
 2. Rewrite traits.
 3. Rewrite API calls of matrices.
+4. Rewrite tests.
 
 ### Requirements
 1. Template library Eigen.
-2. Template library EigenRand for generating random matrices.
 
+### Important Notes
+1. Use **VectorXd** or **VectorXf** as type of arguments and gradient.
+
+### Finished
+ - [x] DE
+ - [x] L_BFGS
+ 
 ### Developers
 1. Zhou Yao
+
+### Important changes
+1. Traits and SFINAE utilities are removed. Now you are forced to write at most 3 methods for function type if necessary. 
+2. Callbacks are removed. If you really want to use it, modify source code directly.
+
+With these changes, Ensmallen-eigen are simply a collection of unrelated optimization algorithms. In fact, you can just copy the single folder of one optimizer without install whole library.
+
+
+#### Optimizers that only require Evaluate()
+1. DE
+
+#### Optimizers that requires Evaluate(), Gradient(), EvaluateWithGradient()
+1. L_BFGS
+
 
 
 -----

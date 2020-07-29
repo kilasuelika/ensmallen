@@ -98,7 +98,7 @@ class SA
    * @return Objective value of the final point.
    */
   template<typename FunctionType, typename MatType, typename... CallbackTypes>
-  typename MatType::elem_type Optimize(FunctionType& function,
+  typename MatType::Scalar Optimize(FunctionType& function,
                                        MatType& iterate,
                                        CallbackTypes&&... callbacks);
 
@@ -185,7 +185,7 @@ class SA
                     MatType& iterate,
                     MatType& accept,
                     MatType& moveSize,
-                    typename MatType::elem_type& energy,
+                    typename MatType::Scalar& energy,
                     size_t& idx,
                     size_t& sweepCounter,
                     CallbackTypes&... callbacks);

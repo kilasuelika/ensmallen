@@ -56,7 +56,7 @@ class PrimalDualSolver
    * @param callbacks Callback functions.
    */
   template<typename SDPType, typename MatType, typename... CallbackTypes>
-  typename MatType::elem_type Optimize(const SDPType& sdp,
+  typename MatType::Scalar Optimize(const SDPType& sdp,
                                        MatType& coordinates,
                                        CallbackTypes&&... callbacks);
 
@@ -78,7 +78,7 @@ class PrimalDualSolver
    * @param callbacks Callback functions.
    */
   template<typename SDPType, typename MatType, typename... CallbackTypes>
-  typename MatType::elem_type Optimize(const SDPType& sdp,
+  typename MatType::Scalar Optimize(const SDPType& sdp,
                                        MatType& coordinates,
                                        MatType& ySparse,
                                        MatType& yDense,

@@ -54,7 +54,7 @@ class RandomSelection
     // Find the number of functions to use.
     const size_t numFunctions = function.NumFunctions();
 
-    typename MatType::elem_type objective = 0;
+    typename MatType::Scalar objective = 0;
     for (size_t f = 0; f < std::floor(numFunctions * fraction); f += batchSize)
     {
       const size_t selection = arma::as_scalar(arma::randi<arma::uvec>(

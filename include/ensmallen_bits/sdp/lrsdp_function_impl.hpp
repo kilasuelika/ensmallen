@@ -57,7 +57,7 @@ LRSDPFunction<SDPType>::~LRSDPFunction()
 
 template<typename SDPType>
 template<typename MatType>
-typename MatType::elem_type LRSDPFunction<SDPType>::Evaluate(
+typename MatType::Scalar LRSDPFunction<SDPType>::Evaluate(
     const MatType& /* coordinates */) const
 {
   // Note: We don't require to update the R*R^T matrix here as the current
@@ -77,7 +77,7 @@ void LRSDPFunction<SDPType>::Gradient(const MatType& /* coordinates */,
 
 template<typename SDPType>
 template<typename MatType>
-typename MatType::elem_type LRSDPFunction<SDPType>::EvaluateConstraint(
+typename MatType::Scalar LRSDPFunction<SDPType>::EvaluateConstraint(
     const size_t index,
     const MatType& coordinates) const
 {
@@ -124,7 +124,7 @@ void UpdateRRT(LRSDPFunction<SDPType>& function,
 //! used with an LRSDPFunction.
 template <typename MatrixType, typename VecType, typename MatType>
 static inline void
-UpdateObjective(typename MatType::elem_type& objective,
+UpdateObjective(typename MatType::Scalar& objective,
                 const MatType& rrt,
                 const std::vector<MatrixType>& ais,
                 const VecType& bis,
@@ -207,7 +207,7 @@ EvaluateImpl(LRSDPFunction<SDPType>& function,
   UpdateRRT(function, rrt);
 
   // Optimized objective function.
-  typename MatType::elem_type objective =
+  typename MatType::Scalar objective =
       trace((trans(coordinates) * function.SDP().C()) * coordinates);
 
   // Now each constraint.
@@ -253,7 +253,7 @@ GradientImpl(const LRSDPFunction<SDPType>& function,
 // so we have to go about this in a somewhat round-about way.
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::sp_mat>>>::Evaluate(
     const MatType& coordinates) const
 {
@@ -262,7 +262,7 @@ AugLagrangianFunction<LRSDPFunction<SDP<arma::sp_mat>>>::Evaluate(
 
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::mat>>>::Evaluate(
     const MatType& coordinates) const
 {
@@ -289,7 +289,7 @@ inline void AugLagrangianFunction<LRSDPFunction<SDP<arma::mat>>>::Gradient(
 
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::sp_fmat>>>::Evaluate(
     const MatType& coordinates) const
 {
@@ -298,7 +298,7 @@ AugLagrangianFunction<LRSDPFunction<SDP<arma::sp_fmat>>>::Evaluate(
 
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::fmat>>>::Evaluate(
     const MatType& coordinates) const
 {

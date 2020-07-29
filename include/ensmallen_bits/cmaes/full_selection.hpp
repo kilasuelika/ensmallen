@@ -39,7 +39,7 @@ class FullSelection
     // Find the number of functions to use.
     const size_t numFunctions = function.NumFunctions();
 
-    typename MatType::elem_type objective = 0;
+    typename MatType::Scalar objective = 0;
     for (size_t f = 0; f < numFunctions; f += batchSize)
     {
       const size_t effectiveBatchSize = std::min(batchSize, numFunctions - f);

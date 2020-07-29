@@ -83,7 +83,7 @@ class ConstrLpBallSolver
   void Optimize(const MatType& v,
                 MatType& s)
   {
-    typedef typename MatType::elem_type ElemType;
+    typedef typename MatType::Scalar ElemType;
 
     if (p == std::numeric_limits<double>::infinity())
     {

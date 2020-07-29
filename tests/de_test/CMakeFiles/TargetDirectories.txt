@@ -1,0 +1,3 @@
+/mnt/d/Source/ensmallen-eigen/tests/de_test/CMakeFiles/rebuild_cache.dir
+/mnt/d/Source/ensmallen-eigen/tests/de_test/CMakeFiles/edit_cache.dir
+/mnt/d/Source/ensmallen-eigen/tests/de_test/CMakeFiles/mp.dir

@@ -47,7 +47,7 @@ class LineSearch
   template<typename FunctionType,
            typename MatType,
            typename GradType = MatType>
-  typename MatType::elem_type Optimize(FunctionType& function,
+  typename MatType::Scalar Optimize(FunctionType& function,
                                        const MatType& x1,
                                        MatType& x2);
 
@@ -79,7 +79,7 @@ class LineSearch
    * @return Derivative of function(x0 + gamma * deltaX) with respect to gamma.
    */
   template<typename FunctionType, typename MatType, typename GradType>
-  typename MatType::elem_type Derivative(FunctionType& function,
+  typename MatType::Scalar Derivative(FunctionType& function,
                                          const MatType& x0,
                                          const MatType& deltaX,
                                          const double gamma);

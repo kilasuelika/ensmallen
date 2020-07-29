@@ -85,7 +85,7 @@ class ConstrStructGroupSolver
   template<typename MatType>
   void Optimize(const MatType& v, MatType& s)
   {
-    typedef typename MatType::elem_type ElemType;
+    typedef typename MatType::Scalar ElemType;
 
     size_t nGroups = groupExtractor.NumGroups();
     ElemType dualNorm = 0;
@@ -196,7 +196,7 @@ class GroupLpBall
    * @param groupId group ID number.
    */
   template<typename MatType>
-  typename MatType::elem_type DualNorm(const MatType& yk, const int groupId)
+  typename MatType::Scalar DualNorm(const MatType& yk, const int groupId)
   {
     if (p == std::numeric_limits<double>::infinity())
     {

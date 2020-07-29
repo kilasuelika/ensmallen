@@ -31,12 +31,12 @@ inline void SGDTestFunction::Shuffle()
 }
 
 template<typename MatType>
-typename MatType::elem_type SGDTestFunction::Evaluate(
+typename MatType::Scalar SGDTestFunction::Evaluate(
     const MatType& coordinates,
     const size_t begin,
     const size_t batchSize) const
 {
-  typename MatType::elem_type objective = 0;
+  typename MatType::Scalar objective = 0;
 
   for (size_t i = begin; i < begin + batchSize; i++)
   {

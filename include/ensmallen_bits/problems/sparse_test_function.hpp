@@ -38,17 +38,17 @@ class SparseTestFunction
 
   //! Evaluate a function.
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates,
+  typename MatType::Scalar Evaluate(const MatType& coordinates,
                                        const size_t i,
                                        const size_t batchSize = 1) const;
 
   //! Evaluate all the functions.
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates) const;
+  typename MatType::Scalar Evaluate(const MatType& coordinates) const;
 
   //! Evaluate the gradient of a function.
   template<typename MatType,
-           typename GradType = arma::SpMat<typename MatType::elem_type>>
+           typename GradType = arma::SpMat<typename MatType::Scalar>>
   void Gradient(const MatType& coordinates,
                 const size_t i,
                 GradType& gradient,
@@ -56,7 +56,7 @@ class SparseTestFunction
 
   //! Evaluate the gradient of a feature function.
   template<typename MatType,
-           typename GradType = arma::SpMat<typename MatType::elem_type>>
+           typename GradType = arma::SpMat<typename MatType::Scalar>>
   void PartialGradient(const MatType& coordinates,
                        const size_t j,
                        GradType& gradient) const;

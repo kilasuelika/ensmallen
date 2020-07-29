@@ -26,12 +26,12 @@ inline SparseTestFunction::SparseTestFunction()
 
 //! Evaluate a function.
 template<typename MatType>
-inline typename MatType::elem_type SparseTestFunction::Evaluate(
+inline typename MatType::Scalar SparseTestFunction::Evaluate(
     const MatType& coordinates,
     const size_t i,
     const size_t batchSize) const
 {
-  typename MatType::elem_type result = 0.0;
+  typename MatType::Scalar result = 0.0;
   for (size_t j = i; j < i + batchSize; ++j)
   {
     result += coordinates[j] * coordinates[j] + bi[j] * coordinates[j] +
@@ -43,10 +43,10 @@ inline typename MatType::elem_type SparseTestFunction::Evaluate(
 
 //! Evaluate all the functions.
 template<typename MatType>
-inline typename MatType::elem_type SparseTestFunction::Evaluate(
+inline typename MatType::Scalar SparseTestFunction::Evaluate(
     const MatType& coordinates) const
 {
-  typename MatType::elem_type objective = 0.0;
+  typename MatType::Scalar objective = 0.0;
   for (size_t i = 0; i < NumFunctions(); ++i)
   {
     objective += coordinates[i] * coordinates[i] + bi[i] * coordinates[i] +

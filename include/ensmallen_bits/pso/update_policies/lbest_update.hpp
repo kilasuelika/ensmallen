@@ -105,7 +105,7 @@ class LBestUpdate
 
        // Initialize local best indices to self indices of particles.
        localBestIndices = arma::linspace<
-           arma::Col<typename MatType::elem_type> >(0, n-1, n);
+           arma::Col<typename MatType::Scalar> >(0, n-1, n);
 
        // Set sizes r1 and r2.
        r1.set_size(iterate.n_rows, iterate.n_cols);
@@ -125,10 +125,10 @@ class LBestUpdate
       * @param particleBestFitnesses The personal best fitness values of
       *     particles.
       */
-     void Update(arma::Cube<typename MatType::elem_type>& particlePositions,
-                 arma::Cube<typename MatType::elem_type>& particleVelocities,
-                 arma::Cube<typename MatType::elem_type>& particleBestPositions,
-                 arma::Col<typename MatType::elem_type>& particleBestFitnesses)
+     void Update(arma::Cube<typename MatType::Scalar>& particlePositions,
+                 arma::Cube<typename MatType::Scalar>& particleVelocities,
+                 arma::Cube<typename MatType::Scalar>& particleBestPositions,
+                 arma::Col<typename MatType::Scalar>& particleBestFitnesses)
      {
        // Velocity update logic.
        for (size_t i = 0; i < n; i++)
@@ -159,19 +159,19 @@ class LBestUpdate
      size_t n;
 
      //! Exploitation factor.
-     typename MatType::elem_type c1;
+     typename MatType::Scalar c1;
 
      //! Exploration factor.
-     typename MatType::elem_type c2;
+     typename MatType::Scalar c2;
 
      //! Constriction factor chi.
-     typename MatType::elem_type chi;
+     typename MatType::Scalar chi;
 
      //! Vectors of random numbers.
      MatType r1, r2;
 
      //! Indices of each particle's best neighbour.
-     arma::Col<typename MatType::elem_type> localBestIndices;
+     arma::Col<typename MatType::Scalar> localBestIndices;
 
      // Helper functions for calculating neighbours.
     inline size_t left(size_t index) { return (index + n - 1) % n; }

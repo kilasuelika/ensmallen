@@ -68,7 +68,7 @@ class LRSDPFunction
    * coordinates.
    */
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates) const;
+  typename MatType::Scalar Evaluate(const MatType& coordinates) const;
 
   /**
    * Evaluate the gradient of the LRSDP (no constraints) at the given
@@ -81,7 +81,7 @@ class LRSDPFunction
    * Evaluate a particular constraint of the LRSDP at the given coordinates.
    */
   template<typename MatType>
-  typename MatType::elem_type EvaluateConstraint(
+  typename MatType::Scalar EvaluateConstraint(
       const size_t index,
       const MatType& coordinates) const;
 
@@ -142,13 +142,13 @@ class LRSDPFunction
 // Declare specializations in lrsdp_function.cpp.
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::sp_mat>>>::Evaluate(
     const MatType& coordinates) const;
 
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::mat>>>::Evaluate(
     const MatType& coordinates) const;
 
@@ -166,13 +166,13 @@ inline void AugLagrangianFunction<LRSDPFunction<SDP<arma::mat>>>::Gradient(
 
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::sp_fmat>>>::Evaluate(
     const MatType& coordinates) const;
 
 template<>
 template<typename MatType>
-inline typename MatType::elem_type
+inline typename MatType::Scalar
 AugLagrangianFunction<LRSDPFunction<SDP<arma::fmat>>>::Evaluate(
     const MatType& coordinates) const;
 

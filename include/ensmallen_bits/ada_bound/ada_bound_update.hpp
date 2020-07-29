@@ -129,7 +129,7 @@ class AdaBoundUpdate
                 const GradType& gradient)
     {
       // Convenience typedefs.
-      typedef typename MatType::elem_type ElemType;
+      typedef typename MatType::Scalar ElemType;
 
       // Save the initial step size.
       if (first)

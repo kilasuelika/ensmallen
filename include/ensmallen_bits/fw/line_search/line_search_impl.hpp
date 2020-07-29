@@ -20,11 +20,11 @@
 namespace ens {
 
 template<typename FunctionType, typename MatType, typename GradType>
-typename MatType::elem_type LineSearch::Optimize(FunctionType& function,
+typename MatType::Scalar LineSearch::Optimize(FunctionType& function,
                                                  const MatType& x1,
                                                  MatType& x2)
 {
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
 
   typedef Function<FunctionType, MatType, GradType> FullFunctionType;
   FullFunctionType& f = static_cast<FullFunctionType&>(function);
@@ -99,7 +99,7 @@ typename MatType::elem_type LineSearch::Optimize(FunctionType& function,
 
 //! Derivative of the function along the search line.
 template<typename FunctionType, typename MatType, typename GradType>
-typename MatType::elem_type LineSearch::Derivative(FunctionType& function,
+typename MatType::Scalar LineSearch::Derivative(FunctionType& function,
                                                    const MatType& x0,
                                                    const MatType& deltaX,
                                                    const double gamma)

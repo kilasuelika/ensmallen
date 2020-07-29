@@ -86,7 +86,7 @@ AugLagrangian::Optimize(
     CallbackTypes&&... callbacks)
 {
   // Convenience typedefs.
-  typedef typename MatType::elem_type ElemType;
+  typedef typename MatType::Scalar ElemType;
   typedef typename MatTypeTraits<MatType>::BaseMatType BaseMatType;
   typedef typename MatTypeTraits<GradType>::BaseMatType BaseGradType;
 

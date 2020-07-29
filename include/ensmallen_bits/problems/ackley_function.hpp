@@ -12,6 +12,9 @@
 #ifndef ENSMALLEN_PROBLEMS_ACKLEY_FUNCTION_HPP
 #define ENSMALLEN_PROBLEMS_ACKLEY_FUNCTION_HPP
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 namespace ens {
 namespace test {
 
@@ -47,7 +50,7 @@ class AckleyFunction
    * @param c Multiplicative constant with a default value of 2 * pi.
    * @param epsilon Coefficient to avoid division by zero (numerical stability).
    */
-  AckleyFunction(const double c = 2 * arma::datum::pi,
+  AckleyFunction(const double c = 2 * M_PI,
                  const double epsilon = 1e-8);
 
   /**
@@ -60,8 +63,12 @@ class AckleyFunction
   size_t NumFunctions() const { return 1; }
 
   //! Get the starting point.
-  template<typename MatType = arma::mat>
-  MatType GetInitialPoint() const { return MatType("-5.0; 5.0"); }
+  template<typename MatType = Eigen::VectorXd>
+  MatType GetInitialPoint() const {
+	  MatType m(2);
+	  m<<-5,5;
+	return m; 
+	}
 
   /**
    * Evaluate a function for a particular batch-size.
@@ -71,7 +78,7 @@ class AckleyFunction
    * @param batchSize Number of points to process.
    */
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates,
+  typename MatType::Scalar Evaluate(const MatType& coordinates,
                                        const size_t begin,
                                        const size_t batchSize) const;
 
@@ -81,7 +88,7 @@ class AckleyFunction
    * @param coordinates The function coordinates.
    */
   template<typename MatType>
-  typename MatType::elem_type Evaluate(const MatType& coordinates) const;
+  typename MatType::Scalar Evaluate(const MatType& coordinates) const;
 
   /**
    * Evaluate the gradient of a function for a particular batch-size.
@@ -91,10 +98,10 @@ class AckleyFunction
    * @param gradient The function gradient.
    * @param batchSize Number of points to process.
    */
-  template<typename MatType, typename GradType>
+  template<typename MatType>
   void Gradient(const MatType& coordinates,
                 const size_t begin,
-                GradType& gradient,
+                MatType& gradient,
                 const size_t batchSize) const;
 
   /**
@@ -103,8 +110,11 @@ class AckleyFunction
    * @param coordinates The function coordinates.
    * @param gradient The function gradient.
    */
-  template<typename MatType, typename GradType>
-  void Gradient(const MatType& coordinates, GradType& gradient);
+  template<typename MatType>
+  void Gradient(const MatType& coordinates, MatType& gradient);
+
+template<typename MatType>
+ typename MatType::Scalar EvaluateWithGradient(const MatType& coordinates, MatType& gradient);
 
   //! Get the value used for c.
   double MultiplicativeConstant() const { return c; }
