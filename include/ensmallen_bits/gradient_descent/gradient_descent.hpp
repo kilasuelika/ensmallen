@@ -74,27 +74,10 @@ class GradientDescent
    * @return Objective value of the final point.
    */
   template<typename FunctionType,
-           typename MatType,
-           typename GradType,
-           typename... CallbackTypes>
-  typename std::enable_if<IsArmaType<GradType>::value,
-      typename MatType::Scalar>::type
+           typename MatType>
+      typename MatType::Scalar
   Optimize(FunctionType& function,
-           MatType& iterate,
-           CallbackTypes&&... callbacks);
-
-  //! Forward the MatType as GradType.
-  template<typename SeparableFunctionType,
-           typename MatType,
-           typename... CallbackTypes>
-  typename MatType::Scalar Optimize(SeparableFunctionType& function,
-                                       MatType& iterate,
-                                       CallbackTypes&&... callbacks)
-  {
-    return Optimize<SeparableFunctionType, MatType, MatType,
-        CallbackTypes...>(function, iterate,
-        std::forward<CallbackTypes>(callbacks)...);
-  }
+           MatType& iterate);
 
   /**
    * Assert all dimensions are numeric and optimize the given function using
@@ -118,32 +101,12 @@ class GradientDescent
    * @return Objective value of the final point.
    */
   template<typename FunctionType,
-           typename MatType,
-           typename GradType,
-           typename... CallbackTypes>
-  typename std::enable_if<IsArmaType<GradType>::value,
-      typename MatType::Scalar>::type
+           typename MatType>
+ typename MatType::Scalar::type
   Optimize(FunctionType& function,
            MatType& iterate,
            const std::vector<bool>& categoricalDimensions,
-           const arma::Row<size_t>& numCategories,
-           CallbackTypes&&... callbacks);
-
-  //! Forward the MatType as GradType.
-  template<typename FunctionType,
-           typename MatType,
-           typename... CallbackTypes>
-  typename MatType::Scalar Optimize(
-      FunctionType& function,
-      MatType& iterate,
-      const std::vector<bool>& categoricalDimensions,
-      const arma::Row<size_t>& numCategories,
-      CallbackTypes&&... callbacks)
-  {
-    return Optimize<FunctionType, MatType, MatType,
-        CallbackTypes...>(function, iterate, categoricalDimensions,
-        numCategories, std::forward<CallbackTypes>(callbacks)...);
-  }
+           const Eigen::VectorXi& numCategories);
 
   //! Get the step size.
   double StepSize() const { return stepSize; }

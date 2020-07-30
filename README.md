@@ -11,11 +11,12 @@ This is a fork of Ensmallen using Eigen as backend.
 1. Template library Eigen.
 
 ### Important Notes
-1. Use **VectorXd** or **VectorXf** as type of arguments and gradient.
+1. Use **VectorXd** or **VectorXf** as type of arguments and gradients. They are column vectors.
 
 ### Finished
  - [x] DE
  - [x] L_BFGS
+ - [x] GradientDescent
  
 ### Developers
 1. Zhou Yao
@@ -32,7 +33,7 @@ With these changes, Ensmallen-eigen are simply a collection of unrelated optimiz
 
 #### Optimizers that requires Evaluate(), Gradient(), EvaluateWithGradient()
 1. L_BFGS
-
+2. GradientDescent
 
 
 -----

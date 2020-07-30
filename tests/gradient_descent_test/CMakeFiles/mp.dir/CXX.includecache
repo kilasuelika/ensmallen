@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/eigen_helper/Rand.hpp
+random
+-
+
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/gradient_descent/gradient_descent.hpp
+gradient_descent_impl.hpp
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/gradient_descent/gradient_descent_impl.hpp
+
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/gradient_descent/gradient_descent_impl.hpp
+gradient_descent.hpp
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/gradient_descent/gradient_descent.hpp
+
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/problems/ackley_function.hpp
+cmath
+-
+ackley_function_impl.hpp
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/problems/ackley_function_impl.hpp
+
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/problems/ackley_function_impl.hpp
+ackley_function.hpp
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/problems/ackley_function.hpp
+
+/mnt/d/Source/ensmallen-eigen/tests/gradient_descent_test/main.cpp
+numeric
+-
+Eigen/Core
+-
+cmath
+-
+iostream
+-
+../../include/ensmallen_bits/eigen_helper/Rand.hpp
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/eigen_helper/Rand.hpp
+../../include/ensmallen_bits/gradient_descent/gradient_descent.hpp
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/gradient_descent/gradient_descent.hpp
+../../include/ensmallen_bits/problems/ackley_function.hpp
+/mnt/d/Source/ensmallen-eigen/include/ensmallen_bits/problems/ackley_function.hpp
+
